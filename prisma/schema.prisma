@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Usuários Familiares/Amigos
+model Usuario {
+  id        String   @id @default(uuid())
+  nome      String
+  email     String   @unique
+  senha     String   // Hash bcrypt
+  relacao   String   // pai-mae, irmao-irma, etc
+  createdAt DateTime @default(now())
+  
+  relatos   Relato[]
+}
+
+// Relatos compartilhados
+model Relato {
+  id           String   @id @default(uuid())
+  convivencia  String   @db.Text
+  mudancas     String   @db.Text
+  ajuda        String   @db.Text
+  createdAt    DateTime @default(now())
+  
+  usuarioId    String
+  usuario      Usuario  @relation(fields: [usuarioId], references: [id])
+  
+  @@index([usuarioId])
+  @@index([createdAt])
+}
+
+// Instituições
+model Instituicao {
+  id        String   @id @default(uuid())
+  nome      String
+  email     String   @unique
+  senha     String   // Hash bcrypt
+  tipo      String   // universidade, ong, governo
+  aprovado  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  noticias Noticia[]
+}
+
+// Notícias (opcional - pode usar API externa)
+model Noticia {
+  id         String   @id @default(uuid())
+  titulo     String
+  conteudo   String   @db.Text
+  categoria  String   // pesquisa, evento, estudo
+  icone      String
+  createdAt  DateTime @default(now())
+  
+  autorId    String
+  autor      Instituicao @relation(fields: [autorId], references: [id])
+}
