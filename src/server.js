@@ -12,9 +12,13 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000'
+  origin: [
+    'http://localhost:3000',
+    'https://conexao-consciente-frontend-l2iq.vercel.app/', // Adicione sua URL da Vercel
+    'https://seu-dominio.com' // Se tiver domínio próprio
+  ],
+  credentials: true
 }));
-app.use(express.json());
 
 // Rotas
 app.use('/api/auth', authRoutes);
