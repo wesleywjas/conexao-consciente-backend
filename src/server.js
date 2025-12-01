@@ -13,7 +13,7 @@ const app = express();
 // CORS - Permitir frontend
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://conexao-consciente-frontend-l2iq.vercel.app/',
+  'https://conexao-consciente-frontend-l2iq.vercel.app',
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
