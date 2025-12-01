@@ -11,24 +11,20 @@ const noticiasRoutes = require('./routes/noticias');
 const app = express();
 
 // CORS - Permitir frontend
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://conexao-consciente-frontend-l2iq.vercel.app',
-  process.env.FRONTEND_URL
-].filter(Boolean);
-
 app.use(cors({
-  origin: function(origin, callback) {
-    // Permitir requisições sem origin (mobile apps, curl, etc)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
+  origin: [
+    'http://localhost:3000',
+    'https://conexao-consciente-frontend-l2iq.vercel.app',
+    'https://conexao-consciente-frontend-git-a0e88d-wesleys-projects-8354d382.vercel.app',
+    'https://conexao-consciente-frontend-l21q-oh6iyo6nr.vercel.app'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// IMPORTANTE: adicionar antes das rotas
+app.options('*', cors()); // Habilitar pre-flight para todas as rotas
 
 app.use(express.json());
 
@@ -62,6 +58,7 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 CORS habilitado para Vercel`);
 });
 
 // Tratamento de encerramento gracioso
